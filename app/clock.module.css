@@ -1,0 +1,100 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+}
+
+.clock {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    border: 10px solid #333;
+    border-radius: 50%;
+    background-color: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    /* タップ/マウス操作を有効にする */
+    touch-action: none;
+    cursor: pointer;
+}
+
+.number {
+    position: absolute;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #555;
+    transform: translate(-50%, -50%);
+}
+
+/* 各目盛りの位置 */
+.number1 { top: 15%; left: 73%; } /* 1時の位置 */
+.number2 { top: 31%; left: 89%; } /* 2時の位置 */
+.number3 { top: 50%; left: 94%; } /* 3時の位置 */
+.number4 { top: 69%; left: 89%; } /* 4時の位置 */
+.number5 { top: 85%; left: 73%; } /* 5時の位置 */
+.number6 { top: 93%; left: 50%; } /* 6時の位置 */
+.number7 { top: 85%; left: 27%; } /* 7時の位置 */
+.number8 { top: 69%; left: 11%; } /* 8時の位置 */
+.number9 { top: 50%; left: 5%; } /* 9時の位置 */
+.number10 { top: 31%; left: 11%; } /* 10時の位置 */
+.number11 { top: 15%; left: 27%; } /* 11時の位置 */
+.number12 { top: 7%; left: 50%; } /* 12時の位置 */
+
+.hourHand,
+.minuteHand {
+    position: absolute;
+    bottom: 50%;
+    left: 50%;
+    transform-origin: bottom;
+    border-radius: 5px;
+    background-color: #333;
+    z-index: 10;
+    pointer-events: none; /* 針自体をタップ対象から外す */
+}
+
+.hourHand {
+    width: 8px;
+    height: 60px;
+    background-color: #f44336;
+}
+
+.minuteHand {
+    width: 6px;
+    height: 90px;
+    background-color: #2196f3;
+}
+
+.centerDot {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 16px;
+    height: 16px;
+    background-color: #333;
+    border-radius: 50%;
+    z-index: 20;
+    pointer-events: none;
+}
+
+.timeDisplay {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.timeDisplay p {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.timeDisplay button {
+    font-size: 2rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin-left: 10px;
+}
