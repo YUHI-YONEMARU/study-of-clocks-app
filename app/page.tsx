@@ -10,6 +10,12 @@ export default function ClockPage() {
     const [dragTarget, setDragTarget] = useState<'hour' | 'minute' | null>(null);
     const previousMinutesRef = useRef(minutes);
 
+    useEffect(() => {
+        const now = new Date();
+        setHours(now.getHours());
+        setMinutes(now.getMinutes());
+    }, []);
+
     // minutesが更新されるたびにrefを更新
     useEffect(() => {
         previousMinutesRef.current = minutes;
