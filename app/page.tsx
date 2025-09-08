@@ -8,6 +8,7 @@ export default function ClockPage() {
     const [minutes, setMinutes] = useState(0);
     const [isDragging, setIsDragging] = useState(false);
     const [dragTarget, setDragTarget] = useState<'hour' | 'minute' | null>(null);
+    const [showTime, setShowTime] = useState(false);
     const previousMinutesRef = useRef(minutes);
 
     useEffect(() => {
@@ -89,17 +90,12 @@ export default function ClockPage() {
             const newMinutes = _newMinutes === 60 ? 0 : _newMinutes;
             setMinutes(newMinutes);
 
-            // 分が59から0に変わった、または0から59に変わったかを検知
             const prevMinutes = previousMinutesRef.current;
             if (prevMinutes === 59 && newMinutes === 0) {
                 setHours((prevHours) => (prevHours === 12 ? 1 : prevHours + 1));
             } else if (prevMinutes === 0 && newMinutes === 59) {
                 setHours((prevHours) => (prevHours === 1 ? 12 : prevHours - 1));
             }
-
-            console.log(prevMinutes+"→"+newMinutes);
-
-
 
         } else if (dragTarget === 'hour') {
             const newHours = Math.round(angleDeg / 30);
@@ -138,6 +134,7 @@ export default function ClockPage() {
 
     return (
         <div className={styles.container}>
+            <h1>なんじなんぷん？</h1>
             <div 
                 className={styles.clock}
                 onMouseDown={handleStart}
@@ -164,10 +161,18 @@ export default function ClockPage() {
                 {/* 針の回転の中心 */}
                 <div className={styles.centerDot}></div>
             </div>
-            
             <div className={styles.timeDisplay}>
-                <p>{hours}時{minutes}分</p>
-                <button onClick={speakTime}>🔊</button>
+                {!showTime ? (
+                    <button onClick={() => setShowTime(true)} className={styles.showTimeButton}>こたえをみる</button>
+                ) : (
+                    <button onClick={() => setShowTime(false)} className={styles.showTimeButton}>こたえをかくす</button>
+                )}
+                {showTime && (
+                    <div>
+                      <p className={styles.time}>{hours}時{minutes}分</p>
+                      <button onClick={speakTime}>🔊</button>
+                    </div>
+                )}
             </div>
         </div>
     );
