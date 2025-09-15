@@ -9,6 +9,11 @@ export default function ClockPage() {
     const [isDragging, setIsDragging] = useState(false);
     const [dragTarget, setDragTarget] = useState<'hour' | 'minute' | null>(null);
     const [showTime, setShowTime] = useState(false);
+    const [showBonusQuestionButton, setShowBonusQuestionButton] = useState(false);
+    const [showQuestion, setShowQuestion] = useState(false);
+    const [questionNumber, setQuestionNumber] = useState(0);
+    const [showNextQuestionButton, setShowNextQuestionButton] = useState(false);
+    const [questionCount, setQuestionCount] = useState(0); 
     const previousMinutesRef = useRef(minutes);
 
     useEffect(() => {
@@ -109,6 +114,61 @@ export default function ClockPage() {
         setDragTarget(null);
     };
 
+
+    // ランダムな5の倍数を生成する関数
+    const generateRandomQuestion = (count: number) => {
+        let number;
+        if (count === 1) {
+            // 1問目は5から20
+            const randomMultiplier = Math.floor(Math.random() * 4) + 1; // 1, 2, 3, 4
+            number = randomMultiplier * 5;
+        } else {
+            // 2問目と3問目は25から55
+            const randomMultiplier = Math.floor(Math.random() * 7) + 5; // 5, 6, ..., 11
+            number = randomMultiplier * 5;
+        }
+        setQuestionNumber(number);
+    };
+
+    // 「こたえをみる」ボタンを押したときのハンドラー
+    const handleShowTime = () => {
+        setShowTime(true);
+        // ボタンを非表示にし、次の問題を準備
+        setShowBonusQuestionButton(true);
+    };
+
+    // 「おまけのもんだいをみる」ボタンを押したときのハンドラー
+    const handleShowBonusQuestion = () => {
+        setShowBonusQuestionButton(false);
+        const nextCount = 1;
+        setQuestionCount(nextCount);
+        setShowNextQuestionButton(false);
+
+        generateRandomQuestion(nextCount);
+        setShowQuestion(true);
+        setTimeout(() => {
+            setShowNextQuestionButton(true);
+        }, 500);
+    };
+    
+    // 「つぎのもんだいをみる」ボタンを押したときのハンドラー
+    const handleNextQuestion = () => {
+        const nextCount = questionCount + 1;
+        setQuestionCount(nextCount);
+        setShowNextQuestionButton(false);
+
+        if (nextCount <= 3) {
+            generateRandomQuestion(nextCount);
+            setShowQuestion(true);
+            setTimeout(() => {
+                setShowNextQuestionButton(true);
+            }, 500);
+        } else {
+            // 3問目が終わったら終了メッセージを表示
+            setShowQuestion(false);
+        }
+    };
+
     // イベントリスナーの設定
     useEffect(() => {
         if (isDragging) {
@@ -162,16 +222,32 @@ export default function ClockPage() {
                 <div className={styles.centerDot}></div>
             </div>
             <div className={styles.timeDisplay}>
-                {!showTime ? (
-                    <button onClick={() => setShowTime(true)} className={styles.showTimeButton}>こたえをみる</button>
+                {showTime ? (
+                    <>
+                        <p className={styles.time}>{hours}時{minutes}分 <button onClick={speakTime}>🔊</button></p>
+                    </>
                 ) : (
-                    <button onClick={() => setShowTime(false)} className={styles.showTimeButton}>こたえをかくす</button>
+                    <button onClick={handleShowTime} className={styles.showTimeButton}>こたえをみる</button>
                 )}
-                {showTime && (
-                    <div>
-                      <p className={styles.time}>{hours}時{minutes}分</p>
-                      <button onClick={speakTime}>🔊</button>
-                    </div>
+
+                {showBonusQuestionButton && (
+                    <button onClick={handleShowBonusQuestion}>おまけのもんだいをみる</button>
+                )}
+
+                {/* おまけ問題の表示ロジック */}
+                {questionCount > 0 && questionCount <= 3 && showQuestion && (
+                    <p>
+                        {questionNumber} 
+                        {questionCount === 3 ? " ふんまえは？" : " ふんごは？"}
+                    </p>
+                )}
+                
+                {questionCount === 4 && (
+                    <p>おつかれさまでした！</p>
+                )}
+
+                {showNextQuestionButton && questionCount < 3 && (
+                    <button onClick={handleNextQuestion}>つぎのもんだいをみる</button>
                 )}
             </div>
         </div>
