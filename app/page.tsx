@@ -19,7 +19,7 @@ export default function ClockPage() {
     useEffect(() => {
         const now = new Date();
         setHours(now.getHours());
-        setMinutes(now.getMinutes());
+        setMinutes(Math.round(now.getMinutes() / 5) * 5);
     }, []);
 
     // minutesが更新されるたびにrefを更新
@@ -91,14 +91,14 @@ export default function ClockPage() {
         }
 
         if (dragTarget === 'minute') {
-            const _newMinutes = Math.round(angleDeg / 6);
+            const _newMinutes = Math.round(angleDeg / 6 / 5) * 5;
             const newMinutes = _newMinutes === 60 ? 0 : _newMinutes;
             setMinutes(newMinutes);
 
             const prevMinutes = previousMinutesRef.current;
-            if (prevMinutes === 59 && newMinutes === 0) {
+            if (prevMinutes === 55 && newMinutes === 0) {
                 setHours((prevHours) => (prevHours === 12 ? 1 : prevHours + 1));
-            } else if (prevMinutes === 0 && newMinutes === 59) {
+            } else if (prevMinutes === 0 && newMinutes === 55) {
                 setHours((prevHours) => (prevHours === 1 ? 12 : prevHours - 1));
             }
 
