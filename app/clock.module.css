@@ -52,6 +52,31 @@
 .number11 { top: 15%; left: 27%; } /* 11時の位置 */
 .number12 { top: 7%; left: 50%; } /* 12時の位置 */
 
+/* 針の先端のグリップ */
+.hourGrip {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: 22px;
+    height: 22px;
+    background-color: #f44336;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.minuteGrip {
+    position: absolute;
+    top: -2px;
+    left: 3px;
+    width: 22px;
+    height: 22px;
+    background-color: #2196f3;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+}
+
 .hourHand,
 .minuteHand {
     position: absolute;
@@ -61,7 +86,7 @@
     border-radius: 5px;
     background-color: #333;
     z-index: 10;
-    pointer-events: none; /* 針自体をタップ対象から外す */
+    
 }
 
 .hourHand {

@@ -197,9 +197,23 @@ export default function ClockPage() {
             <h1>なんじなんぷん？</h1>
             <div 
                 className={styles.clock}
-                onMouseDown={handleStart}
-                onTouchStart={handleStart}
             >
+                <div 
+                    className={styles.hourHand} 
+                    style={{ transform: `rotate(${hourDeg}deg)` }}
+                    onMouseDown={handleStart}
+                    onTouchStart={handleStart}
+                >
+                <div className={styles.hourGrip}></div>
+                </div>
+                <div 
+                    className={styles.minuteHand} 
+                    style={{ transform: `rotate(${minuteDeg}deg)` }}
+                    onMouseDown={handleStart}
+                    onTouchStart={handleStart}
+                >
+                <div className={styles.minuteGrip}></div>
+                </div>
                 {/* 時刻の目盛り */}
                 <div className={`${styles.number} ${styles.number1}`}>1</div>
                 <div className={`${styles.number} ${styles.number2}`}>2</div>
