@@ -238,15 +238,16 @@ export default function ClockPage() {
             <div className={styles.timeDisplay}>
                 {showTime ? (
                     <>
-                        <p className={styles.time}>{hours}時{minutes}分 <button onClick={speakTime}>🔊</button></p>
+                        <p className={styles.time}>{hours}時{minutes}分<button className={styles.speakTime} onClick={speakTime}>🔊</button></p>
+                        
                     </>
                 ) : (
-                    <button onClick={handleShowTime} className={styles.showTimeButton}>こたえをみる</button>
+                    <button className={styles.cardButton} onClick={handleShowTime}>こたえをみる</button>
                 )}
 
-                {showBonusQuestionButton && (
-                    <button onClick={handleShowBonusQuestion}>おまけのもんだいをみる</button>
-                )}
+                {/*showBonusQuestionButton && (
+                    <button className={styles.showBonusQuestion} onClick={handleShowBonusQuestion}>おまけのもんだいをみる</button>
+                )*/}
 
                 {/* おまけ問題の表示ロジック */}
                 {questionCount > 0 && questionCount <= 3 && showQuestion && (
