@@ -39,17 +39,17 @@
 }
 
 /* 各目盛りの位置 */
-.number1 { top: 15%; left: 73%; } /* 1時の位置 */
-.number2 { top: 31%; left: 89%; } /* 2時の位置 */
+.number1 { top: 14%; left: 72%; } /* 1時の位置 */
+.number2 { top: 29%; left: 88%; } /* 2時の位置 */
 .number3 { top: 50%; left: 94%; } /* 3時の位置 */
-.number4 { top: 69%; left: 89%; } /* 4時の位置 */
-.number5 { top: 85%; left: 73%; } /* 5時の位置 */
+.number4 { top: 71%; left: 88%; } /* 4時の位置 */
+.number5 { top: 86%; left: 72%; } /* 5時の位置 */
 .number6 { top: 93%; left: 50%; } /* 6時の位置 */
-.number7 { top: 85%; left: 27%; } /* 7時の位置 */
-.number8 { top: 69%; left: 11%; } /* 8時の位置 */
+.number7 { top: 86%; left: 28%; } /* 7時の位置 */
+.number8 { top: 71%; left: 12%; } /* 8時の位置 */
 .number9 { top: 50%; left: 5%; } /* 9時の位置 */
-.number10 { top: 31%; left: 11%; } /* 10時の位置 */
-.number11 { top: 15%; left: 27%; } /* 11時の位置 */
+.number10 { top: 29%; left: 12%; } /* 10時の位置 */
+.number11 { top: 14%; left: 28%; } /* 11時の位置 */
 .number12 { top: 7%; left: 50%; } /* 12時の位置 */
 
 /* 針の先端のグリップ */
