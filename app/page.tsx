@@ -256,7 +256,7 @@ export default function ClockPage() {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5 }}
                         >
-                            {hours}時{minutes}分<button className={styles.speakTime} onClick={speakTime}>🔊</button>
+                            {hours}時{minutes}分<button className={styles.speakTime} onClick={() => speakTime(hours, minutes)}>🔊</button>
                         </motion.p>
                 ) : (
                     <>
