@@ -177,7 +177,7 @@ export default function ClockPage() {
         setShowBonusQuestion(false);
         setShowBonusQuestionButton(false);
         setBonusQuestionTime({ hours: 0, minutes: 0 });
-        setSelectedTimeOffset(15);
+        setSelectedTimeOffset(generateRandomOffset());
         setShowBonusQuestionAnswer(false);
     };
 
