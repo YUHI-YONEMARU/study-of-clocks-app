@@ -117,6 +117,7 @@
 .timeDisplay {
     text-align: center;
     margin-top: 20px;
+    width: 300px;
 }
 
 .timeDisplay p {
@@ -142,7 +143,9 @@
 /* カード風のボタンデザイン */
 .cardButton {
     background-color: #64b5f6; /* ボタンの背景色 */
-    padding: 14px 48px;
+    margin-top: 10px;
+    padding: 14px;
+    width: 100%;
     color: white; /* テキストの色 */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 影を付けて立体感を出す */
     transform: translateY(0); /* 通常時の位置 */
@@ -161,28 +164,51 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 影を薄くする */
 }
 
+.cardButton.resetType {
+    background-color: #ffffff;
+    color: #333333;
+    margin-top: 15px;
+}
+
+/* ホバー時の効果 */
+.cardButton.resetType:hover {
+    background-color: #f8f8f8; /* ホバー時の色を少し暗くする */
+}
+
 .speakTime {
     padding: 12px 12px;
 }
 
-/* カード風のボタンデザイン */
-.showBonusQuestion {
-    background-color: #64b5f6; /* ボタンの背景色 */
-    padding: 10px 12px;
-    color: white; /* テキストの色 */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 影を付けて立体感を出す */
-    transform: translateY(0); /* 通常時の位置 */
+.cardButton.showBonusQuestionType,
+.cardButton.showBonusQuestionAnswerType
+ {
+    margin-top: 35px;
+    background-color: #725bf4; /* ボタンの背景色 */
 }
 
 /* ホバー時の効果 */
-.showBonusQuestion:hover {
-    background-color: #42a5f5; /* ホバー時の色を少し暗くする */
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* 影を濃くする */
-    transform: translateY(-2px); /* 少し上に動かす */
+.cardButton.showBonusQuestionType,
+.cardButton.showBonusQuestionAnswerType
+{
+    background-color: #6248f8; /* ホバー時の色を少し暗くする */
 }
 
-/* アクティブ（クリック時）の視覚的効果 */
-.showBonusQuestion:active {
-    transform: translateY(1px); /* 少し下に押し込む */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 影を薄くする */
+
+.bonusQuestion {
+    margin-top: 30px;
+}
+
+.bonusQuestion p,
+.bonusQuestion select {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.bonusQuestion .answer {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-size: 2rem;
+    font-weight: bold;
+    color: #333;
 }

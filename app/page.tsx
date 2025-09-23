@@ -2,19 +2,26 @@
 
 import { useState, useEffect, useRef } from 'react';
 import styles from './clock.module.css';
+import classnames from "classnames";
+import { motion } from "framer-motion";
 
 export default function ClockPage() {
     const [hours, setHours] = useState(0);
     const [minutes, setMinutes] = useState(0);
+    const [answerHours, setAnswerHours] = useState(0);
+    const [answerMinutes, setAnswerMinutes] = useState(0);
     const [isDragging, setIsDragging] = useState(false);
     const [dragTarget, setDragTarget] = useState<'hour' | 'minute' | null>(null);
-    const [showTime, setShowTime] = useState(false);
-    const [showBonusQuestionButton, setShowBonusQuestionButton] = useState(false);
-    const [showQuestion, setShowQuestion] = useState(false);
-    const [questionNumber, setQuestionNumber] = useState(0);
-    const [showNextQuestionButton, setShowNextQuestionButton] = useState(false);
-    const [questionCount, setQuestionCount] = useState(0); 
     const previousMinutesRef = useRef(minutes);
+    
+    const [showTime, setShowTime] = useState(false);
+    const [showResetButton, setShowResetButton] = useState(false);
+    const [showBonusQuestionButton, setShowBonusQuestionButton] = useState(false);
+    const [showBonusQuestion, setShowBonusQuestion] = useState(false);
+    const [bonusQuestionTime, setBonusQuestionTime] = useState({ hours: 0, minutes: 0 });
+    const [selectedTimeOffset, setSelectedTimeOffset] = useState(15);
+    const [showBonusQuestionAnswer, setShowBonusQuestionAnswer] = useState(false);
+    const [showBonusQuestionAnswerButton, setShowBonusQuestionAnswerButton] = useState(false);
 
     useEffect(() => {
         const now = new Date();
@@ -32,8 +39,8 @@ export default function ClockPage() {
     const minuteDeg = minutes * 6;
 
     // 音声読み上げ関数
-    const speakTime = () => {
-        const text = `${hours}時${minutes}分`;
+    const speakTime = (hoursToSpeak: number, minutesToSpeak: number) => {
+        const text = `${hoursToSpeak}時${minutesToSpeak}分`;
         if ('speechSynthesis' in window) {
             const utterance = new SpeechSynthesisUtterance(text);
             utterance.lang = 'ja-JP';
@@ -114,59 +121,65 @@ export default function ClockPage() {
         setDragTarget(null);
     };
 
-
-    // ランダムな5の倍数を生成する関数
-    const generateRandomQuestion = (count: number) => {
-        let number;
-        if (count === 1) {
-            // 1問目は5から20
-            const randomMultiplier = Math.floor(Math.random() * 4) + 1; // 1, 2, 3, 4
-            number = randomMultiplier * 5;
-        } else {
-            // 2問目と3問目は25から55
-            const randomMultiplier = Math.floor(Math.random() * 7) + 5; // 5, 6, ..., 11
-            number = randomMultiplier * 5;
-        }
-        setQuestionNumber(number);
-    };
-
     // 「こたえをみる」ボタンを押したときのハンドラー
     const handleShowTime = () => {
         setShowTime(true);
-        // ボタンを非表示にし、次の問題を準備
+        setBonusQuestionTime({ hours, minutes }); // おまけ問題の基準時刻をセット
         setShowBonusQuestionButton(true);
+        setShowResetButton(true);
     };
 
-    // 「おまけのもんだいをみる」ボタンを押したときのハンドラー
     const handleShowBonusQuestion = () => {
+        setShowBonusQuestion(true);
+        setShowBonusQuestionAnswerButton(true);
         setShowBonusQuestionButton(false);
-        const nextCount = 1;
-        setQuestionCount(nextCount);
-        setShowNextQuestionButton(false);
-
-        generateRandomQuestion(nextCount);
-        setShowQuestion(true);
-        setTimeout(() => {
-            setShowNextQuestionButton(true);
-        }, 500);
     };
-    
-    // 「つぎのもんだいをみる」ボタンを押したときのハンドラー
-    const handleNextQuestion = () => {
-        const nextCount = questionCount + 1;
-        setQuestionCount(nextCount);
-        setShowNextQuestionButton(false);
 
-        if (nextCount <= 3) {
-            generateRandomQuestion(nextCount);
-            setShowQuestion(true);
-            setTimeout(() => {
-                setShowNextQuestionButton(true);
-            }, 500);
-        } else {
-            // 3問目が終わったら終了メッセージを表示
-            setShowQuestion(false);
+   // おまけ問題の答えを計算して表示する関数
+    const handleShowBonusQuestionAnswer = () => {
+        setShowBonusQuestionAnswer(true);
+        setShowBonusQuestionAnswerButton(false);
+
+        // 答えを計算し、状態にセット
+        let totalMinutes = bonusQuestionTime.hours * 60 + bonusQuestionTime.minutes + selectedTimeOffset;
+        let newHours = Math.floor(totalMinutes / 60);
+        let newMinutes = totalMinutes % 60;
+
+        if (newMinutes < 0) {
+            newMinutes += 60;
+            newHours -= 1;
         }
+
+        if (newHours > 12) {
+            newHours -= 12;
+        } else if (newHours <= 0) {
+            newHours += 12;
+        }
+
+        newMinutes = Math.round(newMinutes / 5) * 5;
+        if (newMinutes === 60) {
+            newMinutes = 0;
+            newHours += 1;
+            if (newHours > 12) {
+                newHours -= 12;
+            } else if (newHours === 0) {
+                newHours = 12;
+            }
+        }
+        
+        setAnswerHours(newHours);
+        setAnswerMinutes(newMinutes);
+    };
+
+    // リセット関数
+    const handleReset = () => {
+        setShowTime(false);
+        setShowResetButton(false);
+        setShowBonusQuestion(false);
+        setShowBonusQuestionButton(false);
+        setBonusQuestionTime({ hours: 0, minutes: 0 });
+        setSelectedTimeOffset(15);
+        setShowBonusQuestionAnswer(false);
     };
 
     // イベントリスナーの設定
@@ -237,34 +250,80 @@ export default function ClockPage() {
             </div>
             <div className={styles.timeDisplay}>
                 {showTime ? (
-                    <>
-                        <p className={styles.time}>{hours}時{minutes}分<button className={styles.speakTime} onClick={speakTime}>🔊</button></p>
-                        
-                    </>
+                        <motion.p
+                            className={styles.time}
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5 }}
+                        >
+                            {hours}時{minutes}分<button className={styles.speakTime} onClick={speakTime}>🔊</button>
+                        </motion.p>
                 ) : (
-                    <button className={styles.cardButton} onClick={handleShowTime}>こたえをみる</button>
+                    <>
+                        <button className={classnames(styles.cardButton, styles.showTimeType)} onClick={handleShowTime}>こたえをみる</button>
+                    </>
                 )}
 
-                {/*showBonusQuestionButton && (
-                    <button className={styles.showBonusQuestion} onClick={handleShowBonusQuestion}>おまけのもんだいをみる</button>
-                )*/}
-
-                {/* おまけ問題の表示ロジック */}
-                {questionCount > 0 && questionCount <= 3 && showQuestion && (
-                    <p>
-                        {questionNumber} 
-                        {questionCount === 3 ? " ふんまえは？" : " ふんごは？"}
-                    </p>
-                )}
-                
-                {questionCount === 4 && (
-                    <p>おつかれさまでした！</p>
+                {showBonusQuestionButton && (
+                    <motion.p
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5 }}
+                    >
+                        <button className={classnames(styles.cardButton, styles.showBonusQuestionType)} onClick={handleShowBonusQuestion}>おまけのもんだいをみる</button>
+                    </motion.p>
                 )}
 
-                {showNextQuestionButton && questionCount < 3 && (
-                    <button onClick={handleNextQuestion}>つぎのもんだいをみる</button>
+                {showBonusQuestion && (
+                    <motion.p
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5 }}
+                    >
+                    <div className={styles.bonusQuestion}>
+                        <p>では{bonusQuestionTime.hours}時{bonusQuestionTime.minutes}分の</p>
+                        <select
+                            value={selectedTimeOffset}
+                            onChange={(e) => setSelectedTimeOffset(parseInt(e.target.value))}
+                        >
+                            {[...Array(25)].map((_, i) => {
+                                const offset = (i - 12) * 5;
+                                return (
+                                    <option key={offset} value={offset}>
+                                        {offset > 0 ? `${offset}分後` : offset < 0 ? `${-offset}分前` : `${offset}分`}
+                                    </option>
+                                );
+                            })}
+                        </select>
+                        <p>はなんじなんぷん？</p>
+                        {showBonusQuestionAnswerButton && (
+                            <button className={classnames(styles.cardButton, styles.showBonusQuestionAnswerType)} onClick={handleShowBonusQuestionAnswer}>こたえをみる</button>
+                        )}
+                        {showBonusQuestionAnswer && (
+                            <motion.p
+                                className={styles.answer}
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.5 }}
+                            >
+                                こたえ：{answerHours}時{answerMinutes}分
+                                <button className={styles.speakTime} onClick={() => speakTime(answerHours, answerMinutes)}>🔊</button>
+                            </motion.p>
+                        )}
+                    </div>
+                    </motion.p>
+                )}
+                {showResetButton && (
+                    <motion.p
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5 }}
+                    >
+                        <button className={classnames(styles.cardButton, styles.resetType)} onClick={handleReset}>さいしょにもどす</button>
+                    </motion.p>
                 )}
             </div>
+            
         </div>
     );
 }
