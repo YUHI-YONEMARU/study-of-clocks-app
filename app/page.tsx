@@ -140,7 +140,7 @@ export default function ClockPage() {
         setShowBonusQuestionAnswerButton(false);
 
         // 答えを計算し、状態にセット
-        let totalMinutes = bonusQuestionTime.hours * 60 + bonusQuestionTime.minutes + selectedTimeOffset;
+        const totalMinutes = bonusQuestionTime.hours * 60 + bonusQuestionTime.minutes + selectedTimeOffset;
         let newHours = Math.floor(totalMinutes / 60);
         let newMinutes = totalMinutes % 60;
 
