@@ -195,9 +195,12 @@
 
 .bonusQuestion {
     margin-top: 30px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
 }
 
-.bonusQuestion p,
+.bonusQuestion,
 .bonusQuestion select {
     font-size: 1.5rem;
     font-weight: bold;
@@ -207,7 +210,7 @@
 .bonusQuestion .answer {
     margin-top: 20px;
     margin-bottom: 10px;
-    font-size: 2rem;
+    font-size: 1.8rem;
     font-weight: bold;
     color: #333;
 }

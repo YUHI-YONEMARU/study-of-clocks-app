@@ -19,7 +19,6 @@ export default function ClockPage() {
     const [showBonusQuestionButton, setShowBonusQuestionButton] = useState(false);
     const [showBonusQuestion, setShowBonusQuestion] = useState(false);
     const [bonusQuestionTime, setBonusQuestionTime] = useState({ hours: 0, minutes: 0 });
-    const [selectedTimeOffset, setSelectedTimeOffset] = useState(15);
     const [showBonusQuestionAnswer, setShowBonusQuestionAnswer] = useState(false);
     const [showBonusQuestionAnswerButton, setShowBonusQuestionAnswerButton] = useState(false);
 
@@ -182,6 +181,14 @@ export default function ClockPage() {
         setShowBonusQuestionAnswer(false);
     };
 
+    const generateRandomOffset = () => {
+        // 0 から 24 までのランダムな整数を生成
+        const randomIndex = Math.floor(Math.random() * 25);
+        // そのインデックスに対応するオフセット値（-60から60）を計算
+        return (randomIndex - 12) * 5;
+    };
+    const [selectedTimeOffset, setSelectedTimeOffset] = useState(generateRandomOffset());
+
     // イベントリスナーの設定
     useEffect(() => {
         if (isDragging) {
@@ -275,27 +282,26 @@ export default function ClockPage() {
                 )}
 
                 {showBonusQuestion && (
-                    <motion.p
+                    <motion.div
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5 }}
                     >
                     <div className={styles.bonusQuestion}>
-                        <p>では{bonusQuestionTime.hours}時{bonusQuestionTime.minutes}分の</p>
+                        では{bonusQuestionTime.hours}時{bonusQuestionTime.minutes}分の
                         <select
                             value={selectedTimeOffset}
                             onChange={(e) => setSelectedTimeOffset(parseInt(e.target.value))}
                         >
-                            {[...Array(25)].map((_, i) => {
-                                const offset = (i - 12) * 5;
-                                return (
-                                    <option key={offset} value={offset}>
-                                        {offset > 0 ? `${offset}分後` : offset < 0 ? `${-offset}分前` : `${offset}分`}
-                                    </option>
-                                );
-                            })}
+                        {[...Array(25)].map((_, i) => (i - 12) * 5)
+                            .filter(offset => offset !== 0)
+                            .map(offset => (
+                                <option key={offset} value={offset}>
+                                    {offset > 0 ? `${offset}分後` : `${-offset}分前`}
+                                </option>
+                        ))}
                         </select>
-                        <p>はなんじなんぷん？</p>
+                        はなんじなんぷん？
                         {showBonusQuestionAnswerButton && (
                             <button className={classnames(styles.cardButton, styles.showBonusQuestionAnswerType)} onClick={handleShowBonusQuestionAnswer}>こたえをみる</button>
                         )}
@@ -311,7 +317,7 @@ export default function ClockPage() {
                             </motion.p>
                         )}
                     </div>
-                    </motion.p>
+                    </motion.div>
                 )}
                 {showResetButton && (
                     <motion.p
