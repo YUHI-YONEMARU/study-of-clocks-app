@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import styles from './clock.module.css';
+import Head from 'next/head';
 import classnames from "classnames";
 import { motion } from "framer-motion";
 
@@ -214,6 +215,28 @@ export default function ClockPage() {
 
     return (
         <div className={styles.container}>
+            <Head>
+                <title>なんじなんぷん？</title>
+                <meta name="description" content="「なんじなんぷん？」は、時計の読み方をクイズ形式で学べる子ども向けのアプリです。時計の針をタップで動かしたり、音声で読み方を確認したりすることができます。" />
+                <meta name="keywords" content="とけいのよみかた, 子ども, 時計, 学習, 時間, アプリ" />
+                <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                <meta name="theme-color" content="#725bf4" />
+                {/* Favicon and Icons */}
+                <link rel="icon" href="/favicon.ico" />
+                <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+                <link rel="icon" type="image/png" sizes="192x192" href="/icon.png" />
+                {/* Open Graph */}
+                <meta property="og:title" content="なんじなんぷん？" />
+                <meta property="og:description" content="時計の読み方をクイズ形式で学べる子ども向けのアプリです。" />
+                <meta property="og:image" content="/og-image.png" />
+                <meta property="og:url" content="https://study-of-clocks-app.vercel.app" />
+                <meta property="og:type" content="website" />
+                {/* Twitter Card */}
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:title" content="なんじなんぷん？" />
+                <meta name="twitter:description" content="時計の読み方をクイズ形式で学べる子ども向けのアプリです。" />
+                <meta name="twitter:image" content="/og-image.png" />
+            </Head>
             <h1>なんじなんぷん？</h1>
             <div 
                 className={styles.clock}
