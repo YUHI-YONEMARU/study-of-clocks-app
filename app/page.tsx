@@ -324,7 +324,7 @@ export default function ClockPage() {
                                 </option>
                         ))}
                         </select>
-                        はなんじなんぷん？
+                        は<br/>なんじなんぷん？
                         {showBonusQuestionAnswerButton && (
                             <button className={classnames(styles.cardButton, styles.showBonusQuestionAnswerType)} onClick={handleShowBonusQuestionAnswer}>こたえをみる</button>
                         )}
